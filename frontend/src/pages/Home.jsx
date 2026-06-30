@@ -19,26 +19,26 @@ function Home() {
   const [summary, setSummary] = useState("");
   const [selectedOption, setSelectedOption] = useState("");
   const [quiz, setQuiz] = useState([]);
-const [currentQuestion, setCurrentQuestion] = useState(0);
-const [score, setScore] = useState(0);
-const [flashcards, setFlashcards] = useState([]);
-const [currentCard, setCurrentCard] = useState(0);
-const [showResult, setShowResult] = useState(false);
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [score, setScore] = useState(0);
+  const [flashcards, setFlashcards] = useState([]);
+  const [currentCard, setCurrentCard] = useState(0);
+  const [showResult, setShowResult] = useState(false);
   const [showAnswer, setShowAnswer] = useState(false);
   const changeTool = (tool) => {
-  setSelectedTool(tool);
-  setPrompt("");
-  setAnswer("");
-  setSummary("");
-  setQuiz([]);
-  setFlashcards([]);
-  setCurrentQuestion(0);
-  setCurrentCard(0);
-  setSelectedOption("");
-  setShowResult(false);
-  setShowAnswer(false);
-  setScore(0);
-};
+    setSelectedTool(tool);
+    setPrompt("");
+    setAnswer("");
+    setSummary("");
+    setQuiz([]);
+    setFlashcards([]);
+    setCurrentQuestion(0);
+    setCurrentCard(0);
+    setSelectedOption("");
+    setShowResult(false);
+    setShowAnswer(false);
+    setScore(0);
+  };
 
   const askAI = async () => {
     if (!prompt.trim()) return;
@@ -46,7 +46,7 @@ const [showResult, setShowResult] = useState(false);
     setLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:5000/ask-ai", {
+      const res = await axios.post("https://skillit-ai.onrender.com/ask-ai", {
         tool: "ask",
         prompt,
       });
@@ -59,86 +59,83 @@ const [showResult, setShowResult] = useState(false);
       setLoading(false);
     }
   };
-const summarizeNotes = async () => {
-  if (!prompt.trim()) return;
+  const summarizeNotes = async () => {
+    if (!prompt.trim()) return;
 
-  setLoading(true);
+    setLoading(true);
 
-  try {
-    const res = await axios.post("http://localhost:5000/ask-ai", {
-      tool: "summary",
-      prompt,
-    });
+    try {
+      const res = await axios.post("https://skillit-ai.onrender.com/ask-ai", {
+        tool: "summary",
+        prompt,
+      });
 
-    setSummary(res.data.answer);
-    setPrompt("");
-  } catch (err) {
-    console.log(err);
-  } finally {
-    setLoading(false);
-  }
-};
-const generateQuiz = async () => {
-  if (!prompt.trim()) return;
-
-  setLoading(true);
-
-  try {
-    const res = await axios.post("http://localhost:5000/ask-ai", {
-      tool: "quiz",
-      prompt,
-    });
-
-    console.log(res.data.answer);
- 
-
-    const data = JSON.parse(res.data.answer);
-    console.log("Parsed quiz:", data);
-console.log("Length:", data.length);
-
-
-    setQuiz(data);
-    console.log("Quiz state updated");
-    console.log("Quiz length:", data.length);
-    setCurrentQuestion(0);
-    setSelectedOption("");
-    setShowResult(false);
-    setScore(0);
-    setPrompt("");
-
-  } catch (err) {
-    console.log(err);
-
-    if (err.response) {
-      console.log(err.response.data);
+      setSummary(res.data.answer);
+      setPrompt("");
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
     }
-  } finally {
-    setLoading(false);
-  }
-};
-const generateFlashcards = async () => {
-  if (!prompt.trim()) return;
+  };
+  const generateQuiz = async () => {
+    if (!prompt.trim()) return;
 
-  setLoading(true);
+    setLoading(true);
 
-  try {
-    const res = await axios.post("http://localhost:5000/ask-ai", {
-      tool: "flashcards",
-      prompt,
-    });
+    try {
+      const res = await axios.post("https://skillit-ai.onrender.com/ask-ai", {
+        tool: "quiz",
+        prompt,
+      });
 
-    const data = JSON.parse(res.data.answer);
+      console.log(res.data.answer);
 
-    setFlashcards(data);
-    setCurrentCard(0);
-    setShowAnswer(false);
-    setPrompt("");
-  } catch (err) {
-    console.log(err);
-  } finally {
-    setLoading(false);
-  }
-};
+      const data = JSON.parse(res.data.answer);
+      console.log("Parsed quiz:", data);
+      console.log("Length:", data.length);
+
+      setQuiz(data);
+      console.log("Quiz state updated");
+      console.log("Quiz length:", data.length);
+      setCurrentQuestion(0);
+      setSelectedOption("");
+      setShowResult(false);
+      setScore(0);
+      setPrompt("");
+    } catch (err) {
+      console.log(err);
+
+      if (err.response) {
+        console.log(err.response.data);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+  const generateFlashcards = async () => {
+    if (!prompt.trim()) return;
+
+    setLoading(true);
+
+    try {
+      const res = await axios.post("https://skillit-ai.onrender.com/ask-ai", {
+        tool: "flashcards",
+        prompt,
+      });
+
+      const data = JSON.parse(res.data.answer);
+
+      setFlashcards(data);
+      setCurrentCard(0);
+      setShowAnswer(false);
+      setPrompt("");
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="home">
       <div className="hero">
@@ -244,18 +241,18 @@ const generateFlashcards = async () => {
 
                 <p>Paste your notes below.</p>
                 <textarea
-  rows="5"
-  placeholder="Paste your notes here..."
-  value={prompt}
-  onChange={(e) => setPrompt(e.target.value)}
-  onKeyDown={(e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      if (!prompt.trim()) return;
-      summarizeNotes();
-    }
-  }}
-></textarea>
+                  rows="5"
+                  placeholder="Paste your notes here..."
+                  value={prompt}
+                  onChange={(e) => setPrompt(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
+                      if (!prompt.trim()) return;
+                      summarizeNotes();
+                    }
+                  }}
+                ></textarea>
                 <button
                   className="ai-btn"
                   onClick={summarizeNotes}
@@ -265,240 +262,212 @@ const generateFlashcards = async () => {
                 </button>
 
                 {summary && (
-  <div className="response-box">
-    <h3>📄 Summary</h3>
+                  <div className="response-box">
+                    <h3>📄 Summary</h3>
 
-    <ReactMarkdown>
-      {summary}
-    </ReactMarkdown>
-  </div>
-)}
+                    <ReactMarkdown>{summary}</ReactMarkdown>
+                  </div>
+                )}
               </div>
             )}
 
-          {selectedTool === "quiz" && (
-  <div className="tool-card">
-    <h2>📝 Quiz Generator</h2>
+            {selectedTool === "quiz" && (
+              <div className="tool-card">
+                <h2>📝 Quiz Generator</h2>
 
-    <p>Enter a topic to generate a quiz.</p>
+                <p>Enter a topic to generate a quiz.</p>
 
+                <input
+                  type="text"
+                  className="topic-input"
+                  placeholder="Example: React, DBMS, Machine Learning..."
+                  value={prompt}
+                  onChange={(e) => setPrompt(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      generateQuiz();
+                    }
+                  }}
+                />
+                <button
+                  className="ai-btn"
+                  onClick={generateQuiz}
+                  disabled={loading}
+                >
+                  {loading ? "Generating..." : "📝 Generate Quiz"}
+                </button>
 
+                {quiz.length > 0 && (
+                  <div className="response-box">
+                    <h3>Question {currentQuestion + 1}</h3>
 
-    <input
-      type="text"
-      className="topic-input"
-      placeholder="Example: React, DBMS, Machine Learning..."
-      value={prompt}
-      onChange={(e) => setPrompt(e.target.value)}
-      onKeyDown={(e) => {
-        if (e.key === "Enter") {
-          e.preventDefault();
-          generateQuiz();
-        }
-      }}
-    />
-<button
-  className="ai-btn"
-  onClick={generateQuiz}
-  disabled={loading}
->
-  {loading ? "Generating..." : "📝 Generate Quiz"}
-</button>
+                    <p>{quiz[currentQuestion].question}</p>
 
-    {quiz.length > 0 && (
-<div className="response-box">
+                    {quiz[currentQuestion].options.map((option, index) => (
+                      <div
+                        key={index}
+                        className={`option ${
+                          selectedOption === option ? "selected" : ""
+                        }`}
+                        onClick={() => {
+                          if (showResult) return;
 
-<h3>
-Question {currentQuestion + 1}
-</h3>
+                          setSelectedOption(option);
+                          setShowResult(true);
 
-<p>
-{quiz[currentQuestion].question}
-</p>
+                          if (option === quiz[currentQuestion].answer) {
+                            setScore((prev) => prev + 1);
+                          }
+                        }}
+                      >
+                        {String.fromCharCode(65 + index)}. {option}
+                      </div>
+                    ))}
 
-{quiz[currentQuestion].options.map((option,index)=>(
-<div
-key={index}
-className={`option ${
-selectedOption===option?"selected":""
-}`}
-onClick={() => {
-  if (showResult) return;
+                    {showResult && (
+                      <div style={{ marginTop: "20px" }}>
+                        {selectedOption === quiz[currentQuestion].answer ? (
+                          <p style={{ color: "green" }}>✅ Correct!</p>
+                        ) : (
+                          <p style={{ color: "red" }}>
+                            ❌ Incorrect! Correct answer is
+                            <strong> {quiz[currentQuestion].answer}</strong>
+                          </p>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
+                {showResult && currentQuestion < quiz.length - 1 && (
+                  <button
+                    className="ai-btn"
+                    onClick={() => {
+                      setCurrentQuestion(currentQuestion + 1);
+                      setSelectedOption("");
+                      setShowResult(false);
+                    }}
+                  >
+                    Next Question →
+                  </button>
+                )}
 
-  setSelectedOption(option);
-  setShowResult(true);
+                {showResult && currentQuestion === quiz.length - 1 && (
+                  <div className="response-box">
+                    <h3>🎉 Quiz Completed!</h3>
 
-  if (option === quiz[currentQuestion].answer) {
-    setScore((prev) => prev + 1);
-  }
-}}
->
-{String.fromCharCode(65+index)}. {option}
-</div>
-))}
+                    <h2>
+                      Final Score: {score}/{quiz.length}
+                    </h2>
 
-{showResult && (
+                    <button
+                      className="ai-btn"
+                      onClick={() => {
+                        setCurrentQuestion(0);
+                        setSelectedOption("");
+                        setShowResult(false);
+                        setScore(0);
+                        generateQuiz();
+                      }}
+                    >
+                      🔄 Try Again
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+            {selectedTool === "flashcards" && (
+              <div className="tool-card">
+                <h2>🧠 Flashcards</h2>
 
-<div style={{marginTop:"20px"}}>
+                <p>Enter a topic to generate flashcards.</p>
 
-{selectedOption===quiz[currentQuestion].answer ?
+                <input
+                  type="text"
+                  className="topic-input"
+                  placeholder="Example: React, DBMS..."
+                  value={prompt}
+                  onChange={(e) => setPrompt(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      generateFlashcards();
+                    }
+                  }}
+                />
 
-<p style={{color:"green"}}>
-✅ Correct!
-</p>
+                <button
+                  className="ai-btn"
+                  onClick={generateFlashcards}
+                  disabled={loading}
+                >
+                  {loading ? "Generating..." : "🧠 Generate Flashcards"}
+                </button>
 
-:
+                {flashcards.length > 0 && (
+                  <div className="flashcard">
+                    <h3>Flashcard {currentCard + 1}</h3>
 
-<p style={{color:"red"}}>
-❌ Incorrect! Correct answer is
-<strong> {quiz[currentQuestion].answer}</strong>
-</p>
+                    <p>{flashcards[currentCard].question}</p>
 
-}
+                    {!showAnswer ? (
+                      <button
+                        className="ai-btn"
+                        onClick={() => setShowAnswer(true)}
+                      >
+                        Show Answer
+                      </button>
+                    ) : (
+                      <>
+                        <hr />
 
-</div>
+                        <h3>Answer</h3>
 
-)}
+                        <p>{flashcards[currentCard].answer}</p>
 
-</div>
-)}
-{showResult &&
-currentQuestion < quiz.length - 1 && (
+                        {currentCard === flashcards.length - 1 ? (
+                          <div
+                            style={{ textAlign: "center", marginTop: "20px" }}
+                          >
+                            <h3>🧠 Flashcards Completed!</h3>
 
-<button
-className="ai-btn"
-onClick={() => {
-  setCurrentQuestion(currentQuestion + 1);
-  setSelectedOption("");
-  setShowResult(false);
-}}
+                            <p style={{ color: "green", fontWeight: "bold" }}>
+                              🎉 Great Job!
+                            </p>
 
->
-Next Question →
-</button>
+                            <p>
+                              You have successfully reviewed all the flashcards.
+                            </p>
 
-)}
-
-
-{showResult && currentQuestion === quiz.length - 1 && (
-  <div className="response-box">
-    <h3>🎉 Quiz Completed!</h3>
-
-    <h2>Final Score: {score}/{quiz.length}</h2>
-
-    <button
-      className="ai-btn"
-      onClick={() => {
-  setCurrentQuestion(0);
-  setSelectedOption("");
-  setShowResult(false);
-  setScore(0);
-  generateQuiz();
-}}
-    >
-      🔄 Try Again
-    </button>
-  </div>
-)}
-   
-  </div>
-)}
-  {selectedTool === "flashcards" && (
-  <div className="tool-card">
-    <h2>🧠 Flashcards</h2>
-
-    <p>Enter a topic to generate flashcards.</p>
-
-    <input
-      type="text"
-      className="topic-input"
-      placeholder="Example: React, DBMS..."
-      value={prompt}
-      onChange={(e) => setPrompt(e.target.value)}
-      onKeyDown={(e) => {
-        if (e.key === "Enter") {
-          e.preventDefault();
-          generateFlashcards();
-        }
-      }}
-    />
-
-    <button
-      className="ai-btn"
-      onClick={generateFlashcards}
-      disabled={loading}
-    >
-      {loading ? "Generating..." : "🧠 Generate Flashcards"}
-    </button>
-
-    {flashcards.length > 0 && (
-      <div className="flashcard">
-        <h3>
-          Flashcard {currentCard + 1}
-        </h3>
-
-        <p>
-          {flashcards[currentCard].question}
-        </p>
-
-        {!showAnswer ? (
-          <button
-            className="ai-btn"
-            onClick={() => setShowAnswer(true)}
-          >
-            Show Answer
-          </button>
-        ) : (
-          <>
-            <hr />
-
-            <h3>Answer</h3>
-
-            <p>
-              {flashcards[currentCard].answer}
-            </p>
-
-          {currentCard === flashcards.length - 1 ? (
-  <div style={{ textAlign: "center", marginTop: "20px" }}>
-    <h3>🧠 Flashcards Completed!</h3>
-
-    <p style={{ color: "green", fontWeight: "bold" }}>
-      🎉 Great Job!
-    </p>
-
-    <p>
-      You have successfully reviewed all the flashcards.
-    </p>
-
-    <button
-      className="ai-btn"
-      onClick={() => {
-        setFlashcards([]);
-        setCurrentCard(0);
-        setShowAnswer(false);
-        setPrompt("");
-      }}
-    >
-      📚 New Topic
-    </button>
-  </div>
-) : (
-  <button
-    className="ai-btn"
-    onClick={() => {
-      setCurrentCard(currentCard + 1);
-      setShowAnswer(false);
-    }}
-  >
-    Next Card →
-  </button>
-)}
-          </>
-        )}
-      </div>
-    )}
-  </div>
-)}
+                            <button
+                              className="ai-btn"
+                              onClick={() => {
+                                setFlashcards([]);
+                                setCurrentCard(0);
+                                setShowAnswer(false);
+                                setPrompt("");
+                              }}
+                            >
+                              📚 New Topic
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            className="ai-btn"
+                            onClick={() => {
+                              setCurrentCard(currentCard + 1);
+                              setShowAnswer(false);
+                            }}
+                          >
+                            Next Card →
+                          </button>
+                        )}
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
         <footer className="footer">
